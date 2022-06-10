@@ -17,4 +17,5 @@ Elements Description:
 3. setDept: This function takes input as the department address as an input to which the students data gets mapped
 4. checkdetails: This function takes students adress and the batch information of the student to check if the students data is mapped to the Department or not.
 
-Below are the Steps of the 
+Code works in the following mentioned steps:
+1. Enter the Student data
