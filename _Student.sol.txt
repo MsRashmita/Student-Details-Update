@@ -1,0 +1,64 @@
+pragma solidity ^0.4.24;
+
+contract Database{
+    address Owner;
+   
+    struct student{
+        bool isuigenerated;
+        string name;
+        string department;
+        string homeaddress;
+        string batch;
+        uint256 phone;
+       
+    }
+
+    mapping (address => student) public studentmapping;
+    mapping (address => bool) public deptmapping;
+   
+    constructor  (){
+        Owner = msg.sender;
+    }
+
+modifier onlyOwner(){
+   
+    require (Owner == msg.sender);
+    _;
+   
+}
+   
+    function setDept(address _address) onlyOwner{
+        require(!deptmapping[_address]);
+        deptmapping[_address]=true;
+    }
+
+    function setStudentData(string _name, string _department, string _homeaddress,
+        uint256 _phone, string _batch) onlyOwner returns (address){
+        address unique = address(sha256(msg.sender, now));
+        require(! studentmapping[unique].isuigenerated);
+        studentmapping[unique].isuigenerated = true;
+        studentmapping[unique].name = _name;
+        studentmapping[unique].department = _department;
+        studentmapping[unique].homeaddress = _homeaddress;
+        studentmapping[unique].batch = _batch;
+        studentmapping[unique].phone = _phone;
+           
+         
+       
+        return unique;
+       
+    }
+       
+
+     function checkdetails(address _unique, string _batch) returns (string){
+       require(deptmapping[msg.sender]);
+       if(keccak256(abi.encodePacked( studentmapping[_unique].batch)) != keccak256(abi.encodePacked(_batch))){
+           return "ERROR : check student data";
+           
+       }    
+       
+       return "STUDENT DATA SAVED";
+   }
+   
+   
+}
